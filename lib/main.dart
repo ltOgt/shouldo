@@ -1,7 +1,9 @@
 // framework
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // package
 import 'package:provider/provider.dart';
+import 'package:shouldo/data/db/moor_db.dart';
 // project
 import 'page/overview/overview_page.dart';
 import 'theme/theme_notifier.dart';
@@ -9,9 +11,12 @@ import 'theme/theme_wrap.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeNotifier(initialTheme: DarkTheme()),
-      child: App(),
+    RepositoryProvider(
+      create: (_) => AppDatabase(),
+      child: ChangeNotifierProvider(
+        create: (_) => ThemeNotifier(initialTheme: DarkTheme()),
+        child: App(),
+      ),
     ),
   );
 }

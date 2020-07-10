@@ -1,4 +1,6 @@
+// framework
 import 'package:flutter/foundation.dart';
+// project
 
 class TaskComposite {
   final int id;
@@ -21,11 +23,4 @@ class TaskComposite {
   int get daysSinceStart => this.startDate != null
       ? DateTime.now().difference(this.startDate)?.inDays
       : null;
-
-  // TODO [DB] { x Moor Setup }
-  //factory TaskComposite.fromEntity(TaskEntity entity) {}
-
-  // TODO [DB] { x Moor Setup }
-  // TaskTableCompanion toCompanion() {}
-
 }

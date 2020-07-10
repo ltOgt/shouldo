@@ -1,16 +1,21 @@
 // framework
 import 'dart:async';
+import 'package:meta/meta.dart';
 // package
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:shouldo/data/composite/task_composite.dart';
-
 // project
+import 'package:shouldo/data/composite/task_composite.dart';
+import 'package:shouldo/page/overview/data/overview_dao.dart';
+
 part 'overview_event.dart';
 part 'overview_state.dart';
 
 class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
-  OverviewBloc() : super(OvStateInitial());
+  OverviewDao dao;
+
+  OverviewBloc({
+    @required this.dao,
+  }) : super(OvStateInitial());
 
   @override
   Stream<OverviewState> mapEventToState(
@@ -20,47 +25,10 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
       // TODO replace Mock Data
       yield OvStateLoaded(
         focusedDate: event.focusedDate,
-        completedTasks: [
-          TaskComposite(
-            id: 5,
-            dueDate: DateTime.now().add(Duration(days: 4)),
-            startDate: DateTime.now().subtract(Duration(days: 4)),
-            completionDate: DateTime.now(),
-            title: "Uncompleted Task 3-3 (B-T)",
-          ),
-        ],
-        activeTasks: [
-          TaskComposite(
-            id: 0,
-            dueDate: DateTime.now().add(Duration(days: 3)),
-            startDate: DateTime.now().subtract(Duration(days: 3)),
-            completionDate: null,
-            title: "Uncompleted Task 3-3 (B-T)",
-          ),
-          TaskComposite(
-            id: 1,
-            dueDate: DateTime.now().add(Duration(days: 2)),
-            startDate: DateTime.now().subtract(Duration(days: 2)),
-            completionDate: null,
-            title: "Uncompleted Task 2-2 (M-M)",
-          ),
-          TaskComposite(
-            id: 2,
-            dueDate: DateTime.now().add(Duration(days: 1)),
-            startDate: DateTime.now().subtract(Duration(days: 1)),
-            completionDate: null,
-            title: "Uncompleted Task 2-2 (T-B)",
-          ),
-        ],
-        stagedTasks: [
-          TaskComposite(
-            id: 4,
-            dueDate: null,
-            startDate: null,
-            completionDate: null,
-            title: "Staged Task",
-          ),
-        ],
+        completedTasks:
+            await dao.getGetCompletedForDate(date: event.focusedDate),
+        activeTasks: await dao.getGetActiveForDate(date: event.focusedDate),
+        stagedTasks: await dao.getGetStagedForDate(date: event.focusedDate),
       );
     }
     // : Seal

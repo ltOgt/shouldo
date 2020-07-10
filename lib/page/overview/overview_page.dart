@@ -1,6 +1,10 @@
+// framework
 import 'package:flutter/material.dart';
+// package
 import 'package:flutter_bloc/flutter_bloc.dart';
+// project
 import 'package:shouldo/data/composite/task_composite.dart';
+import 'package:shouldo/data/db/moor_db.dart';
 import 'package:shouldo/page/overview/bloc/overview_bloc.dart';
 
 class OverviewPage extends StatelessWidget {
@@ -28,7 +32,9 @@ class OverviewPage extends StatelessWidget {
         Flexible(
           child: Container(
             child: BlocProvider(
-              create: (BuildContext context) => OverviewBloc(),
+              create: (BuildContext context) => OverviewBloc(
+                dao: RepositoryProvider.of<AppDatabase>(context).overviewDao,
+              ),
               child: _OverViewPageContent(focusedDate: _focusedDate),
             ),
           ),
