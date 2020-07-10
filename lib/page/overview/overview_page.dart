@@ -33,12 +33,14 @@ class OverviewPage extends StatelessWidget {
         builder: (context, state) {
           // : TODO add description
           if (state is OvStateInitial) {
-            BlocProvider.of<OverviewBloc>(context).add(OvEventLoadForDate(
-              focusedDate: DateTime.now(),
+            BlocProvider.of<OverviewBloc>(context).add(OvEventLoadForPage(
+              page: 0,
             ));
             // TODO [UX] actual loading page
             return Center(child: CircularProgressIndicator());
           } else if (state is OvStateLoaded) {
+            bool _TEMP_isEnterMode = false;
+
             return Column(
               children: <Widget>[
                 OverviewHeaderWidget(
@@ -54,64 +56,45 @@ class OverviewPage extends StatelessWidget {
                     children: <Widget>[
                       PageView.builder(
                         scrollDirection: Axis.horizontal,
+                        controller: state.pageController,
                         physics: const BouncingScrollPhysics(),
                         reverse: true,
-                        itemBuilder: (_, __) => Container(
-                          margin: EdgeInsets.all(4),
-                          color: Colors.red,
-                          width: MediaQuery.of(context).size.width,
-                          child: ListView(
-                            physics: const BouncingScrollPhysics(),
-                            children: <Widget>[
-                              Container(
-                                color: Colors.black,
-                                margin: EdgeInsets.all(4),
-                                height: 500,
-                              ),
-                              Container(
-                                color: Colors.black,
-                                margin: EdgeInsets.all(4),
-                                height: 500,
-                              ),
-                              Container(
-                                color: Colors.black,
-                                margin: EdgeInsets.all(4),
-                                height: 500,
-                              ),
-                              Container(
-                                height: 50, // TODO same as bottom bar
-                              ),
-                            ],
-                          ),
-                        ),
+                        itemBuilder: (_, __) =>
+                            OverviewForDayWidget(state: state),
                       ),
                       Positioned(
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        child: Container(
-                          color: Color(0xCC000000),
-                          height: 50,
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              Flexible(
-                                child: Container(
-                                  color: Colors.blue,
-                                  height: 1,
-                                ),
-                              ),
-                              Container(
-                                child: Icon(Icons.add_box),
-                              ),
-                            ],
-                          ),
-                        ),
+                        child: OverviewBottomBarWidget(),
                       ),
                     ],
                   ),
-                )
+                ),
+                if (_TEMP_isEnterMode) // TODO animate in
+                  ...[
+                  Container(
+                    color: Colors.green,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        TextField(),
+                        Container(
+                          color: Colors.pink,
+                          child: Text("Start Now"),
+                        ),
+                        Container(
+                          color: Colors.pink,
+                          child: Text("Deadline"),
+                        ),
+                        Container(
+                          color: Colors.pink,
+                          child: Text("Add Child"),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             );
           }
@@ -123,6 +106,7 @@ class OverviewPage extends StatelessWidget {
       ),
     );
 
+    /*
     return Column(
       children: <Widget>[
         OverviewHeaderWidget(
@@ -142,9 +126,81 @@ class OverviewPage extends StatelessWidget {
         ),
       ],
     );
+    */
   }
 }
 
+class OverviewBottomBarWidget extends StatelessWidget {
+  const OverviewBottomBarWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Color(0xCC000000),
+      height: 50,
+      width: double.infinity,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Flexible(
+            child: Container(
+              color: Colors.blue,
+              height: 1,
+            ),
+          ),
+          Container(
+            child: Icon(Icons.add_box),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class OverviewForDayWidget extends StatelessWidget {
+  const OverviewForDayWidget({
+    Key key,
+    @required this.state,
+  }) : super(key: key);
+
+  final OvStateLoaded state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(4),
+      color: Colors.red,
+      width: MediaQuery.of(context).size.width,
+      child: ListView(
+        physics: const BouncingScrollPhysics(),
+        children: <Widget>[
+          Container(
+            color: Colors.black,
+            margin: EdgeInsets.all(4),
+            height: 500,
+          ),
+          Container(
+            color: Colors.black,
+            margin: EdgeInsets.all(4),
+            height: 500,
+          ),
+          Container(
+            color: Colors.black,
+            margin: EdgeInsets.all(4),
+            height: 500,
+          ),
+          Container(
+            height: 50, // TODO same as bottom bar
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/*
 class _OverViewPageContent extends StatelessWidget {
   const _OverViewPageContent({
     Key key,
@@ -159,8 +215,8 @@ class _OverViewPageContent extends StatelessWidget {
       builder: (context, state) {
         // : TODO add description
         if (state is OvStateInitial) {
-          BlocProvider.of<OverviewBloc>(context).add(OvEventLoadForDate(
-            focusedDate: this.focusedDate,
+          BlocProvider.of<OverviewBloc>(context).add(OvEventLoadForPage(
+            page: this.focusedDate,
           ));
           // TODO [UX] actual loading page
           return Center(child: CircularProgressIndicator());
@@ -348,3 +404,5 @@ class SortButton extends StatelessWidget {
     );
   }
 }
+
+*/

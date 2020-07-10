@@ -23,11 +23,20 @@ class OvStateLoaded extends OverviewState {
   // [TODO] potentially only fill for focusedDate==TODAY
   final List<TaskComposite> stagedTasks;
 
+  /// To control and react to page transitions
+  final PageController pageController;
+
+  // TODO maybe rename to days in past, could also replace focused date with getter based on daysInPast
+  // TODO postpone until tackled date change during app use
+  final int page;
+
   OvStateLoaded({
     @required this.focusedDate,
     this.completedTasks = const [],
     this.activeTasks = const [],
     this.stagedTasks = const [],
+    @required this.pageController,
+    @required this.page,
   })  :
         // TODO [TEST] these are just to cover basic premisses; date day switch might cause problems too
         assert(

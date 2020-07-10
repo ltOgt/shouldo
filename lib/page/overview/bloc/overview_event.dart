@@ -1,15 +1,15 @@
 part of 'overview_bloc.dart';
 
 /// Available Events:
-/// [OvEventLoadForDate],
+/// [OvEventLoadForPage],
 @immutable
 abstract class OverviewEvent {}
 
-class OvEventLoadForDate implements OverviewEvent {
-  /// The date for which the page should be populated
-  final DateTime focusedDate;
+class OvEventLoadForPage implements OverviewEvent {
+  /// The page for which data should be loaded
+  final int page;
 
-  OvEventLoadForDate({
-    @required this.focusedDate,
+  OvEventLoadForPage({
+    @required this.page,
   });
 }

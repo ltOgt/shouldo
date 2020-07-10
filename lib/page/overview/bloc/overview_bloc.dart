@@ -1,5 +1,6 @@
 // framework
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 // package
 import 'package:bloc/bloc.dart';
@@ -12,23 +13,48 @@ part 'overview_state.dart';
 
 class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
   OverviewDao dao;
+  PageController pageController;
+
+  void pageTransitionListener() {
+    OverviewState previousState = this.state;
+    double currentPage = this.pageController.page;
+
+    if (previousState is OvStateLoaded) {
+      if ((currentPage - previousState.page).abs() > 0.5)
+        this.add(OvEventLoadForPage(
+          page: currentPage.round(),
+        ));
+    }
+  }
 
   OverviewBloc({
     @required this.dao,
-  }) : super(OvStateInitial());
+  }) : super(OvStateInitial()) {
+    this.pageController = PageController();
+    this.pageController.addListener(this.pageTransitionListener);
+  }
+
+  @override
+  Future<void> close() {
+    this.pageController.removeListener(this.pageTransitionListener);
+    this.pageController.dispose();
+    return super.close();
+  }
 
   @override
   Stream<OverviewState> mapEventToState(
     OverviewEvent event,
   ) async* {
-    if (event is OvEventLoadForDate) {
+    if (event is OvEventLoadForPage) {
+      DateTime date = DateTime.now().subtract(Duration(days: event.page));
       // TODO replace Mock Data
       yield OvStateLoaded(
-        focusedDate: event.focusedDate,
-        completedTasks:
-            await dao.getGetCompletedForDate(date: event.focusedDate),
-        activeTasks: await dao.getGetActiveForDate(date: event.focusedDate),
-        stagedTasks: await dao.getGetStagedForDate(date: event.focusedDate),
+        focusedDate: date,
+        page: event.page,
+        pageController: this.pageController,
+        completedTasks: await dao.getGetCompletedForDate(date: date),
+        activeTasks: await dao.getGetActiveForDate(date: date),
+        stagedTasks: await dao.getGetStagedForDate(date: date),
       );
     }
     // : Seal
