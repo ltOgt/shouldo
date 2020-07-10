@@ -53,6 +53,7 @@ class _AppState extends State<App> {
       home: SafeArea(
         child: Scaffold(
           body: PageView.builder(
+            reverse: true,
             controller: this.pageController,
             physics: const BouncingScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
