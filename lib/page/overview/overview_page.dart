@@ -1,9 +1,9 @@
 // framework
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 // package
 import 'package:flutter_bloc/flutter_bloc.dart';
 // project
-import 'package:shouldo/common/widget/theme_toggle_widget.dart';
 import 'package:shouldo/data/composite/task_composite.dart';
 import 'package:shouldo/data/db/moor_db.dart';
 import 'package:shouldo/page/overview/bloc/overview_bloc.dart';
@@ -24,6 +24,104 @@ class OverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime _focusedDate =
         DateTime.now().subtract(Duration(days: this.daysInPast));
+
+    return BlocProvider(
+      create: (BuildContext context) => OverviewBloc(
+        dao: RepositoryProvider.of<AppDatabase>(context).overviewDao,
+      ),
+      child: BlocBuilder<OverviewBloc, OverviewState>(
+        builder: (context, state) {
+          // : TODO add description
+          if (state is OvStateInitial) {
+            BlocProvider.of<OverviewBloc>(context).add(OvEventLoadForDate(
+              focusedDate: DateTime.now(),
+            ));
+            // TODO [UX] actual loading page
+            return Center(child: CircularProgressIndicator());
+          } else if (state is OvStateLoaded) {
+            return Column(
+              children: <Widget>[
+                OverviewHeaderWidget(
+                  focusedDate: state.focusedDate,
+                  // goToFirstPage: BlocProvider.of<OverviewBloc>(context).add(
+                  //   OvEventJumpToToday(),
+                  // )
+                  goToFirstPage: null,
+                  daysInPast: 0,
+                ),
+                Flexible(
+                  child: Stack(
+                    children: <Widget>[
+                      PageView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        reverse: true,
+                        itemBuilder: (_, __) => Container(
+                          margin: EdgeInsets.all(4),
+                          color: Colors.red,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListView(
+                            physics: const BouncingScrollPhysics(),
+                            children: <Widget>[
+                              Container(
+                                color: Colors.black,
+                                margin: EdgeInsets.all(4),
+                                height: 500,
+                              ),
+                              Container(
+                                color: Colors.black,
+                                margin: EdgeInsets.all(4),
+                                height: 500,
+                              ),
+                              Container(
+                                color: Colors.black,
+                                margin: EdgeInsets.all(4),
+                                height: 500,
+                              ),
+                              Container(
+                                height: 50, // TODO same as bottom bar
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          color: Color(0xCC000000),
+                          height: 50,
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Flexible(
+                                child: Container(
+                                  color: Colors.blue,
+                                  height: 1,
+                                ),
+                              ),
+                              Container(
+                                child: Icon(Icons.add_box),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            );
+          }
+          // : Seal
+          else {
+            throw ("OverviewPage; Unmapped State: $state");
+          }
+        },
+      ),
+    );
 
     return Column(
       children: <Widget>[
@@ -215,6 +313,7 @@ class AddButton extends StatelessWidget {
             // TODO [UX] add new task
             icon: Icon(Icons.add),
             onPressed: () => null,
+            // BlocProvider.of<OverviewBloc>(context).add(OvEventAddNew()),
           ),
         ),
       ),

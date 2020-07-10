@@ -52,17 +52,20 @@ class _AppState extends State<App> {
       theme: themeNotifier.theme.themeData,
       home: SafeArea(
         child: Scaffold(
-          body: PageView.builder(
-            reverse: true,
-            controller: this.pageController,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              return OverviewPage(
-                daysInPast: index,
-                goToFirstPage: () => this.pageController.jumpToPage(0),
-              );
-            },
-          ),
+          // TODO might have to pull bloc up to here in order to keep header and footer static
+          // TODO could potentially also use horizontal list view instead of page view
+          body: OverviewPage(daysInPast: 0, goToFirstPage: null),
+          // PageView.builder(
+          //   reverse: true,
+          //   controller: this.pageController,
+          //   physics: const BouncingScrollPhysics(),
+          //   itemBuilder: (BuildContext context, int index) {
+          //     return OverviewPage(
+          //       daysInPast: index,
+          //       goToFirstPage: () => this.pageController.jumpToPage(0),
+          //     );
+          //   },
+          // ),
         ),
       ),
     );
