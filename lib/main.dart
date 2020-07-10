@@ -8,7 +8,12 @@ import 'theme/theme_notifier.dart';
 import 'theme/theme_wrap.dart';
 
 void main() {
-  runApp(App());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeNotifier(initialTheme: DarkTheme()),
+      child: App(),
+    ),
+  );
 }
 
 class App extends StatefulWidget {
@@ -20,45 +25,42 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   PageController pageController;
-  ThemeNotifier themeNotifier;
 
   @override
   void initState() {
     super.initState();
     this.pageController = PageController(initialPage: 0);
-    this.themeNotifier = ThemeNotifier(initialTheme: DarkTheme());
   }
 
   @override
   void dispose() {
     this.pageController.dispose();
-    this.themeNotifier.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ThemeNotifier>.value(
-      value: this.themeNotifier,
-      child: MaterialApp(
-        theme: this.themeNotifier.theme.themeData,
-        home: SafeArea(
-          child: Scaffold(
-            body: PageView.builder(
-              controller: this.pageController,
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (BuildContext context, int index) {
-                return OverviewPage(
-                  daysInPast: index,
-                  goToFirstPage: () => this.pageController.jumpToPage(0),
-                );
-              },
-            ),
-            // floatingActionButton: FloatingActionButton(
-            //   onPressed: () {
-            //     Provider.of<ThemeNotifier>(context, listen: false).toggle();
-            //   },
-            // ),
+    final ThemeNotifier themeNotifier =
+        Provider.of<ThemeNotifier>(context, listen: true);
+
+    return MaterialApp(
+      theme: themeNotifier.theme.themeData,
+      home: SafeArea(
+        child: Scaffold(
+          body: PageView.builder(
+            controller: this.pageController,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              return OverviewPage(
+                daysInPast: index,
+                goToFirstPage: () => this.pageController.jumpToPage(0),
+              );
+            },
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              themeNotifier.toggle();
+            },
           ),
         ),
       ),
