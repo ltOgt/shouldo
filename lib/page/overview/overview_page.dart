@@ -1,14 +1,17 @@
 // framework
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 // package
 import 'package:flutter_bloc/flutter_bloc.dart';
 // project
-import 'package:shouldo/data/composite/task_composite.dart';
 import 'package:shouldo/data/db/moor_db.dart';
 import 'package:shouldo/page/overview/bloc/overview_bloc.dart';
 
+import 'child/overview_bottom_bar_widget.dart';
 import 'child/overview_header_widget.dart';
+import 'child/overview_page_content_loaded_widget.dart';
 
 class OverviewPage extends StatelessWidget {
   const OverviewPage({
@@ -22,45 +25,52 @@ class OverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime _focusedDate =
-        DateTime.now().subtract(Duration(days: this.daysInPast));
-
     return BlocProvider(
       create: (BuildContext context) => OverviewBloc(
         dao: RepositoryProvider.of<AppDatabase>(context).overviewDao,
       ),
       child: BlocBuilder<OverviewBloc, OverviewState>(
         builder: (context, state) {
-          // : TODO add description
+          // : Initial Entry
           if (state is OvStateInitial) {
-            BlocProvider.of<OverviewBloc>(context).add(OvEventLoadForPage(
-              page: 0,
-            ));
+            BlocProvider.of<OverviewBloc>(context).add(
+              OvEventLoadForPage(
+                page: 0,
+              ),
+            );
             // TODO [UX] actual loading page
             return Center(child: CircularProgressIndicator());
-          } else if (state is OvStateLoaded) {
+          }
+          // : Data Loaded
+          else if (state is OvStateLoaded) {
             bool _TEMP_isEnterMode = false;
 
             return Column(
               children: <Widget>[
+                // : HEADER ===========================
                 OverviewHeaderWidget(
                   focusedDate: state.focusedDate,
-                  // goToFirstPage: BlocProvider.of<OverviewBloc>(context).add(
-                  //   OvEventJumpToToday(),
-                  // )
-                  goToFirstPage: null,
+                  goToFirstPage: () => state.pageController.animateToPage(
+                    0,
+                    // :animation takes longer the further away, but never longer than a second
+                    duration:
+                        Duration(milliseconds: min(state.page * 100, 1000)),
+                    curve: Curves.easeInOut,
+                  ),
                   daysInPast: 0,
                 ),
+                // : PAGE CONTENT; incl BOTTOM BAR ====
                 Flexible(
                   child: Stack(
                     children: <Widget>[
                       PageView.builder(
                         scrollDirection: Axis.horizontal,
+                        // : Used to react to page changes and to navigate
                         controller: state.pageController,
                         physics: const BouncingScrollPhysics(),
                         reverse: true,
                         itemBuilder: (_, __) =>
-                            OverviewForDayWidget(state: state),
+                            OverviewPageContentLoadedWidget(state: state),
                       ),
                       Positioned(
                         bottom: 0,
@@ -71,6 +81,7 @@ class OverviewPage extends StatelessWidget {
                     ],
                   ),
                 ),
+                // : BOTTOM BAR EXTENSION AREA =======
                 if (_TEMP_isEnterMode) // TODO animate in
                   ...[
                   Container(
@@ -127,76 +138,6 @@ class OverviewPage extends StatelessWidget {
       ],
     );
     */
-  }
-}
-
-class OverviewBottomBarWidget extends StatelessWidget {
-  const OverviewBottomBarWidget({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Color(0xCC000000),
-      height: 50,
-      width: double.infinity,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Flexible(
-            child: Container(
-              color: Colors.blue,
-              height: 1,
-            ),
-          ),
-          Container(
-            child: Icon(Icons.add_box),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class OverviewForDayWidget extends StatelessWidget {
-  const OverviewForDayWidget({
-    Key key,
-    @required this.state,
-  }) : super(key: key);
-
-  final OvStateLoaded state;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(4),
-      color: Colors.red,
-      width: MediaQuery.of(context).size.width,
-      child: ListView(
-        physics: const BouncingScrollPhysics(),
-        children: <Widget>[
-          Container(
-            color: Colors.black,
-            margin: EdgeInsets.all(4),
-            height: 500,
-          ),
-          Container(
-            color: Colors.black,
-            margin: EdgeInsets.all(4),
-            height: 500,
-          ),
-          Container(
-            color: Colors.black,
-            margin: EdgeInsets.all(4),
-            height: 500,
-          ),
-          Container(
-            height: 50, // TODO same as bottom bar
-          ),
-        ],
-      ),
-    );
   }
 }
 
