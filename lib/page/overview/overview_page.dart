@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 // package
 import 'package:flutter_bloc/flutter_bloc.dart';
 // project
+import 'package:shouldo/common/widget/theme_toggle_widget.dart';
 import 'package:shouldo/data/composite/task_composite.dart';
 import 'package:shouldo/data/db/moor_db.dart';
 import 'package:shouldo/page/overview/bloc/overview_bloc.dart';
+
+import 'child/overview_header_widget.dart';
 
 class OverviewPage extends StatelessWidget {
   const OverviewPage({
@@ -24,7 +27,7 @@ class OverviewPage extends StatelessWidget {
 
     return Column(
       children: <Widget>[
-        OverviewHeader(
+        OverviewHeaderWidget(
           focusedDate: _focusedDate,
           goToFirstPage: goToFirstPage,
           daysInPast: daysInPast,
@@ -40,54 +43,6 @@ class OverviewPage extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class OverviewHeader extends StatelessWidget {
-  const OverviewHeader({
-    Key key,
-    @required DateTime focusedDate,
-    @required this.goToFirstPage,
-    @required this.daysInPast,
-  })  : _focusedDate = focusedDate,
-        super(key: key);
-
-  final DateTime _focusedDate;
-  final VoidCallback goToFirstPage;
-  final int daysInPast;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      color: Colors.black,
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-      ),
-      child: Row(
-        children: <Widget>[
-          InkWell(
-            child: Icon(
-              Icons.calendar_today,
-              color: _focusedDate.day == DateTime.now().day
-                  ? Colors.green
-                  : Colors.white,
-            ),
-            onTap: _focusedDate.day == DateTime.now().day
-                ? null
-                : this.goToFirstPage,
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Text(_focusedDate.toIso8601String() +
-              (this.daysInPast == 0
-                  ? "  (Today)"
-                  : "  (${this.daysInPast} days ago)")),
-        ],
-      ),
     );
   }
 }

@@ -63,11 +63,6 @@ class _AppState extends State<App> {
               );
             },
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              themeNotifier.toggle();
-            },
-          ),
         ),
       ),
     );
