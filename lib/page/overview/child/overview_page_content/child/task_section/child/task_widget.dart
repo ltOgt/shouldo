@@ -17,13 +17,14 @@ class TaskWidget extends StatelessWidget {
 
   // TODO maybe solve via renderbox reference instead?
   // _ used to make number container fill up row, but not optimal
-  final double height = 50;
+  final double height = 40;
 
   static const Radius radius = const Radius.circular(6);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: this.height,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(radius),
         color: Theme.of(context).cardColor,
@@ -31,8 +32,18 @@ class TaskWidget extends StatelessWidget {
       child: Row(
         children: <Widget>[
           this.checkIndicator,
-          Text(this.text),
-          Flexible(child: Container(height: 1)),
+          Expanded(
+            child: Container(
+              child: Text(
+                this.text + " abc 123",
+                style: TextStyle(fontSize: 20),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 8,
+          ),
           Container(
             decoration: BoxDecoration(
               color: const Color(0xFF292929), // TODO move to theme

@@ -18,8 +18,8 @@ class OverviewPageContent extends StatelessWidget {
     // : Page Border Padding
     return Padding(
       padding: EdgeInsets.only(
-        left: 30,
-        right: 30,
+        left: 16,
+        right: 16,
       ),
       // : Holds completed, active, staged
       child: ListView(

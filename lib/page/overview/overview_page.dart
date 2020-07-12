@@ -11,7 +11,7 @@ import 'package:shouldo/page/overview/bloc/overview_bloc.dart';
 
 import 'child/overview_bottom_bar_widget.dart';
 import 'child/overview_header_widget.dart';
-import 'child/overview_page_content/overview_page_content_loaded_widget.dart';
+import 'child/overview_page_content/overview_page_content.dart';
 
 class OverviewPage extends StatelessWidget {
   const OverviewPage({
