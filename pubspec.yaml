@@ -28,6 +28,7 @@ dependencies:
   flutter_bloc: ^5.0.1
   # [DATABASE]
   moor_flutter: ^3.1.0
+  google_fonts: ^1.1.0
 
 
   # The following adds the Cupertino Icons font to your application.

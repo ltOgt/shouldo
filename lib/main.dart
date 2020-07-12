@@ -21,27 +21,8 @@ void main() {
   );
 }
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   App({Key key}) : super(key: key);
-
-  @override
-  _AppState createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  PageController pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    this.pageController = PageController(initialPage: 0);
-  }
-
-  @override
-  void dispose() {
-    this.pageController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,20 +33,8 @@ class _AppState extends State<App> {
       theme: themeNotifier.theme.themeData,
       home: SafeArea(
         child: Scaffold(
-          // TODO might have to pull bloc up to here in order to keep header and footer static
-          // TODO could potentially also use horizontal list view instead of page view
+          backgroundColor: themeNotifier.theme.themeData.backgroundColor,
           body: OverviewPage(daysInPast: 0, goToFirstPage: null),
-          // PageView.builder(
-          //   reverse: true,
-          //   controller: this.pageController,
-          //   physics: const BouncingScrollPhysics(),
-          //   itemBuilder: (BuildContext context, int index) {
-          //     return OverviewPage(
-          //       daysInPast: index,
-          //       goToFirstPage: () => this.pageController.jumpToPage(0),
-          //     );
-          //   },
-          // ),
         ),
       ),
     );
