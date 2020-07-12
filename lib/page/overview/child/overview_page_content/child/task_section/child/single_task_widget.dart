@@ -20,8 +20,10 @@ class SingleTaskWidget extends StatelessWidget {
       checkIndicator: Checkbox(
         value: false,
         onChanged: (bool isChecked) => null,
+
         // TODO [UX] theme
       ),
+      // checkIndicator: Icon(Icons.add_circle_outline), // TODO use for multi
       text: this.taskData.title,
       daysLeft: this.taskData.daysUntilDue,
       daysSince: this.taskData.daysSinceStart,

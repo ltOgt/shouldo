@@ -31,12 +31,22 @@ class TaskWidget extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          this.checkIndicator,
+          SizedBox(
+            width: 8,
+          ),
+          Container(
+            width: height / 1.6,
+            height: height / 1.6,
+            child: this.checkIndicator,
+          ),
+          SizedBox(
+            width: 8,
+          ),
           Expanded(
             child: Container(
               child: Text(
-                this.text + " abc 123",
-                style: TextStyle(fontSize: 20),
+                this.text,
+                style: TextStyle(fontSize: 18),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
