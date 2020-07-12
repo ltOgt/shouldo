@@ -45,6 +45,7 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
   Stream<OverviewState> mapEventToState(
     OverviewEvent event,
   ) async* {
+    // : Handle initialization for current page
     if (event is OvEventLoadForPage) {
       DateTime date = DateTime.now().subtract(Duration(days: event.page));
       // TODO replace Mock Data
@@ -55,11 +56,27 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
         completedTasks: await dao.getGetCompletedForDate(date: date),
         activeTasks: await dao.getGetActiveForDate(date: date),
         stagedTasks: await dao.getGetStagedForDate(date: date),
+        isAdderAreaExpanded: false,
       );
     }
-    // : Seal
+    // : Handle all other events
     else {
-      throw ("OverviewBloc; Unmapped Event: $event");
+      OverviewState previousState = this.state;
+      // : Assumption is that previous state is loaded
+      if (previousState is OvStateLoaded) {
+        // TODO
+        if (event is OvEventToggleAdderAreaExpansion) {
+          yield previousState.copyWith(
+            isAdderAreaExpanded: event.isExpanded,
+          );
+        }
+        // : Seal
+        else {
+          throw ("OverviewBloc; Unmapped Event: $event");
+        }
+      } else {
+        throw ("OverviewBlox; Assumed Page loaded");
+      }
     }
   }
 }

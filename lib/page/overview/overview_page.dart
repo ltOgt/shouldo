@@ -76,15 +76,17 @@ class OverviewPage extends StatelessWidget {
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        child: OverviewBottomBarWidget(),
+                        child: OverviewBottomBarWidget(
+                          isAdderAreaExpanded: state.isAdderAreaExpanded,
+                        ),
                       ),
                     ],
                   ),
                 ),
-                // : BOTTOM BAR EXTENSION AREA =======
-                if (_TEMP_isEnterMode) // TODO animate in
-                  ...[
-                  Container(
+                // : BOTTOM BAR EXTENSION AREA ======
+                ExpandableAdderArea(
+                  expand: state.isAdderAreaExpanded,
+                  child: Container(
                     color: Colors.green,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +107,7 @@ class OverviewPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                ],
+                ),
               ],
             );
           }
@@ -116,5 +118,63 @@ class OverviewPage extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+class ExpandableAdderArea extends StatefulWidget {
+  final Widget child;
+  final bool expand;
+  ExpandableAdderArea({this.expand = false, this.child});
+
+  @override
+  _ExpandableAdderAreaState createState() => _ExpandableAdderAreaState();
+}
+
+class _ExpandableAdderAreaState extends State<ExpandableAdderArea>
+    with SingleTickerProviderStateMixin {
+  AnimationController expandController;
+  Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+    prepareAnimations();
+    _runExpandCheck();
+  }
+
+  ///Setting up the animation
+  void prepareAnimations() {
+    expandController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    animation = CurvedAnimation(
+      parent: expandController,
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _runExpandCheck() {
+    if (widget.expand) {
+      expandController.forward();
+    } else {
+      expandController.reverse();
+    }
+  }
+
+  @override
+  void didUpdateWidget(ExpandableAdderArea oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _runExpandCheck();
+  }
+
+  @override
+  void dispose() {
+    expandController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizeTransition(
+        axisAlignment: 1.0, sizeFactor: animation, child: widget.child);
   }
 }
