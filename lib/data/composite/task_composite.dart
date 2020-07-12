@@ -1,5 +1,6 @@
 // framework
 import 'package:flutter/foundation.dart';
+import 'package:shouldo/common/helper/date_helper.dart';
 // project
 
 class TaskComposite {
@@ -19,8 +20,7 @@ class TaskComposite {
     @required this.title,
   });
 
-  int get daysUntilDue => this.dueDate?.difference(DateTime.now())?.inDays;
-  int get daysSinceStart => this.startDate != null
-      ? DateTime.now().difference(this.startDate)?.inDays
-      : null;
+  int get daysUntilDue => DateHelper.daysBetween(this.dueDate, DateTime.now());
+  int get daysSinceStart =>
+      DateHelper.daysBetween(DateTime.now(), this.dueDate);
 }

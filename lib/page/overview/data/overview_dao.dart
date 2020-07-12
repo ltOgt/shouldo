@@ -23,7 +23,7 @@ class OverviewDao extends DatabaseAccessor<AppDatabase>
         dueDate: DateTime.now().add(Duration(days: 4)),
         startDate: DateTime.now().subtract(Duration(days: 4)),
         completionDate: DateTime.now(),
-        title: "Uncompleted Task 3-3 (B-T)",
+        title: "Uncompleted Task 4-4 (B-T)",
       ),
     ];
   }
@@ -49,7 +49,7 @@ class OverviewDao extends DatabaseAccessor<AppDatabase>
         dueDate: DateTime.now().add(Duration(days: 1)),
         startDate: DateTime.now().subtract(Duration(days: 1)),
         completionDate: null,
-        title: "Uncompleted Task 2-2 (T-B)",
+        title: "Uncompleted Task 1-1 (T-B)",
       ),
     ];
   }
