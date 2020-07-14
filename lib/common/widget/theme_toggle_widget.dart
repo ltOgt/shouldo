@@ -18,9 +18,7 @@ class ThemeToggleWidget extends StatelessWidget {
 
     return InkWell(
       child: Icon(
-        themeNotifier.theme is DarkTheme
-            ? Icons.brightness_low
-            : Icons.brightness_high,
+        themeNotifier.theme is LightTheme ? Icons.tonality : Icons.wb_sunny,
         size: 28,
       ),
       onTap: themeNotifier.toggle,

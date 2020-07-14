@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shouldo/common/widget/theme_toggle_widget.dart';
 import 'package:shouldo/theme/theme_notifier.dart';
 import 'package:shouldo/common/helper/date_helper.dart';
+import 'package:shouldo/theme/theme_wrap.dart';
 
 class OverviewHeaderWidget extends StatelessWidget {
   const OverviewHeaderWidget({
@@ -21,15 +22,15 @@ class OverviewHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeNotifier themeNotifier =
-        Provider.of<ThemeNotifier>(context, listen: false);
+    final ThemeWrap theme =
+        Provider.of<ThemeNotifier>(context, listen: false).theme;
 
     return Container(
       height: 80,
-      color: themeNotifier.theme.headerColor,
+      color: theme.headerColor,
       padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
+        left: theme.sidePadding,
+        right: theme.sidePadding,
       ),
       child: Row(
         children: <Widget>[
@@ -42,7 +43,7 @@ class OverviewHeaderWidget extends StatelessWidget {
                   size: 28,
                   color: DateHelper.isToday(this.focusedDate)
                       ? Colors.green
-                      : themeNotifier.theme.themeData.iconTheme.color,
+                      : theme.themeData.iconTheme.color,
                 ),
                 if (daysInPast != 0)
                   Container(

@@ -1,7 +1,10 @@
 // framework
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // project
 import 'package:shouldo/page/overview/bloc/overview_bloc.dart';
+import 'package:shouldo/theme/theme_notifier.dart';
+import 'package:shouldo/theme/theme_wrap.dart';
 
 import 'child/task_section/task_section.dart';
 
@@ -15,11 +18,13 @@ class OverviewPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeWrap theme = Provider.of<ThemeNotifier>(context, listen: false).theme;
+
     // : Page Border Padding
     return Padding(
       padding: EdgeInsets.only(
-        left: 22,
-        right: 22,
+        left: theme.sidePadding,
+        right: theme.sidePadding,
       ),
       // : Holds completed, active, staged
       child: ListView(

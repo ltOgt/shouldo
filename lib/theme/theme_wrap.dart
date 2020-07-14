@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 abstract class ThemeWrap {
   final ThemeData themeData;
   Color get headerColor;
+  double get sidePadding => 22;
 
   const ThemeWrap({
     @required this.themeData,
   });
 }
 
-class DarkTheme implements ThemeWrap {
+class DarkTheme extends ThemeWrap {
   ThemeData themeData;
 
   @override
@@ -24,7 +25,7 @@ class DarkTheme implements ThemeWrap {
   }
 }
 
-class LightTheme implements ThemeWrap {
+class LightTheme extends ThemeWrap {
   ThemeData themeData;
 
   @override
