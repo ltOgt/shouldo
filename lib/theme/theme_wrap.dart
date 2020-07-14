@@ -9,6 +9,7 @@ abstract class ThemeWrap {
       get startDateColor; // TODO [UX] add different colors for different phase
 
   double get sidePadding => 22;
+  double get adderBarHeight => 50;
 
   const ThemeWrap({
     @required this.themeData,

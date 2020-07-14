@@ -1,6 +1,5 @@
 // framework
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 // project
 import 'package:shouldo/page/overview/bloc/overview_bloc.dart';
 import 'package:shouldo/theme/theme_notifier.dart';
@@ -18,7 +17,7 @@ class OverviewPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeWrap theme = Provider.of<ThemeNotifier>(context, listen: false).theme;
+    ThemeWrap theme = ThemeNotifier.getTheme(context);
 
     // : Page Border Padding
     return Padding(

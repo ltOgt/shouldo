@@ -1,7 +1,6 @@
 // framework
 import 'package:flutter/material.dart';
 // package
-import 'package:provider/provider.dart';
 // project
 import 'package:shouldo/theme/theme_notifier.dart';
 import 'package:shouldo/theme/theme_wrap.dart';
@@ -14,7 +13,7 @@ class ThemeToggleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeNotifier themeNotifier =
-        Provider.of<ThemeNotifier>(context, listen: false);
+        ThemeNotifier.of(context, listen: false);
 
     return InkWell(
       child: Icon(

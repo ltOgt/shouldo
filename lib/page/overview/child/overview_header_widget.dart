@@ -1,7 +1,6 @@
 // framework
 import 'package:flutter/material.dart';
 // package
-import 'package:provider/provider.dart';
 // project
 import 'package:shouldo/common/widget/theme_toggle_widget.dart';
 import 'package:shouldo/theme/theme_notifier.dart';
@@ -22,8 +21,7 @@ class OverviewHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeWrap theme =
-        Provider.of<ThemeNotifier>(context, listen: false).theme;
+    final ThemeWrap theme = ThemeNotifier.getTheme(context);
 
     return Container(
       height: 80,

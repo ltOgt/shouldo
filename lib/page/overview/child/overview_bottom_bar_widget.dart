@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shouldo/page/overview/bloc/overview_bloc.dart';
+import 'package:shouldo/theme/theme_notifier.dart';
+import 'package:shouldo/theme/theme_wrap.dart';
 
 class OverviewBottomBarWidget extends StatelessWidget {
   const OverviewBottomBarWidget({
@@ -13,6 +15,8 @@ class OverviewBottomBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeWrap theme = ThemeNotifier.getTheme(context);
+
     // TODO [UX] react to exapnsion of adder area (show "done"; indicate active/staged target based on input; show "cancel")
     return Container(
       color: Color(0xCC000000),

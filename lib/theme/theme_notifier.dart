@@ -1,10 +1,19 @@
 // framework
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // children
 import 'theme_wrap.dart';
 
 class ThemeNotifier with ChangeNotifier {
   ThemeWrap theme;
+
+  static ThemeWrap getTheme(BuildContext context) {
+    return Provider.of<ThemeNotifier>(context, listen: false).theme;
+  }
+
+  static ThemeNotifier of(BuildContext context, {listen: false}) {
+    return Provider.of<ThemeNotifier>(context, listen: listen);
+  }
 
   ThemeNotifier({
     @required ThemeWrap initialTheme,

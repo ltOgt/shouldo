@@ -26,8 +26,7 @@ class TaskWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeWrap theme =
-        Provider.of<ThemeNotifier>(context, listen: false).theme;
+    final ThemeWrap theme = ThemeNotifier.getTheme(context);
 
     return Container(
       height: this.height,

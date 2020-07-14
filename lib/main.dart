@@ -26,8 +26,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeNotifier themeNotifier =
-        Provider.of<ThemeNotifier>(context, listen: true);
+    final ThemeNotifier themeNotifier = ThemeNotifier.of(context, listen: true);
 
     return MaterialApp(
       theme: themeNotifier.theme.themeData,

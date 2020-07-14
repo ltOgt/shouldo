@@ -47,16 +47,23 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
   ) async* {
     // : Handle initialization for current page
     if (event is OvEventLoadForPage) {
-      DateTime date = DateTime.now().subtract(Duration(days: event.page));
-      // TODO replace Mock Data
+      DateTime _date = DateTime.now().subtract(Duration(days: event.page));
+      bool _isAdderAreaExpanded = false;
+
+      // : should still keep track of whether the adder area was expanded; creation page independant
+      OverviewState previousState = this.state;
+      if (previousState is OvStateLoaded) {
+        _isAdderAreaExpanded = previousState.isAdderAreaExpanded;
+      }
+
       yield OvStateLoaded(
-        focusedDate: date,
+        focusedDate: _date,
         page: event.page,
         pageController: this.pageController,
-        completedTasks: await dao.getGetCompletedForDate(date: date),
-        activeTasks: await dao.getGetActiveForDate(date: date),
-        stagedTasks: await dao.getGetStagedForDate(date: date),
-        isAdderAreaExpanded: false,
+        completedTasks: await dao.getGetCompletedForDate(date: _date),
+        activeTasks: await dao.getGetActiveForDate(date: _date),
+        stagedTasks: await dao.getGetStagedForDate(date: _date),
+        isAdderAreaExpanded: _isAdderAreaExpanded,
       );
     }
     // : Handle all other events
