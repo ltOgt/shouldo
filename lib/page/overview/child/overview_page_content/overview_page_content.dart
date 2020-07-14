@@ -42,7 +42,7 @@ class OverviewPageContent extends StatelessWidget {
             tasks: state.stagedTasks,
           ),
           Container(
-            height: 50, // TODO same as bottom bar
+            height: theme.adderBarHeight,
           ),
         ],
       ),

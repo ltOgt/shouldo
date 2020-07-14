@@ -20,7 +20,7 @@ class OverviewBottomBarWidget extends StatelessWidget {
     // TODO [UX] react to exapnsion of adder area (show "done"; indicate active/staged target based on input; show "cancel")
     return Container(
       color: Color(0xCC000000),
-      height: 50,
+      height: theme.adderBarHeight,
       width: double.infinity,
       child: Row(
         mainAxisSize: MainAxisSize.max,
