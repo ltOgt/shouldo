@@ -26,14 +26,18 @@ class DateHelper {
         : DateHelper.daysBetween(date, DateTime.now()) == 0;
   }
 
+  static int daysAgo(DateTime date) {
+    return DateHelper.daysBetween(DateTime.now(), date);
+  }
+
   static String dayAgoString(DateTime date) {
     int _d = DateHelper.daysBetween(DateTime.now(), date);
     return "$_d day${_d == 1 ? "" : "s"} ago";
   }
 
-  /// Print dates as e.g. Monday, 13th of July, 2020
+  /// Print dates as e.g. July 13th, 2020
   static String dateString(DateTime date) {
-    return "${weekdayString(date)}, ${dayOrdinalString(date)} of ${monthString(date)}, ${date.year}";
+    return "${monthString(date)} ${dayOrdinalString(date)}, ${date.year}";
   }
 
   static String dayOrdinalString(DateTime date) {

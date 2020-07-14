@@ -25,7 +25,7 @@ class OverviewHeaderWidget extends StatelessWidget {
         Provider.of<ThemeNotifier>(context, listen: false);
 
     return Container(
-      height: 100,
+      height: 80,
       color: themeNotifier.theme.headerColor,
       padding: EdgeInsets.only(
         left: 16,
@@ -34,11 +34,27 @@ class OverviewHeaderWidget extends StatelessWidget {
       child: Row(
         children: <Widget>[
           InkWell(
-            child: Icon(
-              Icons.calendar_today,
-              color: DateHelper.isToday(this.focusedDate)
-                  ? Colors.green
-                  : themeNotifier.theme.themeData.iconTheme.color,
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.calendar_today,
+                  size: 28,
+                  color: DateHelper.isToday(this.focusedDate)
+                      ? Colors.green
+                      : themeNotifier.theme.themeData.iconTheme.color,
+                ),
+                if (daysInPast != 0)
+                  Container(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      daysInPast.toString(),
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+              ],
             ),
             onTap: DateHelper.isToday(this.focusedDate)
                 ? null
@@ -47,19 +63,21 @@ class OverviewHeaderWidget extends StatelessWidget {
           SizedBox(
             width: 20,
           ),
-          Text(DateHelper.dateString(this.focusedDate)),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                DateHelper.weekdayString(this.focusedDate),
+                style: TextStyle(fontSize: 24),
+              ),
+              Text(DateHelper.dateString(this.focusedDate)),
+            ],
+          ),
           Flexible(
             child: Container(height: 0),
             flex: 1,
           ),
-          Text(
-            (this.daysInPast == 0
-                ? "(Today)"
-                : "(" +
-                    DateHelper.dayAgoString(this.focusedDate).toString() +
-                    ")"),
-          ),
-          SizedBox(width: 10),
           ThemeToggleWidget(),
         ],
       ),

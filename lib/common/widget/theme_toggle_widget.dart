@@ -21,6 +21,7 @@ class ThemeToggleWidget extends StatelessWidget {
         themeNotifier.theme is DarkTheme
             ? Icons.brightness_low
             : Icons.brightness_high,
+        size: 28,
       ),
       onTap: themeNotifier.toggle,
     );
