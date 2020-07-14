@@ -16,9 +16,9 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
   TaskEntity(
       {@required this.id,
       @required this.title,
-      @required this.dueDate,
-      @required this.startDate,
-      @required this.completionDate});
+      this.dueDate,
+      this.startDate,
+      this.completionDate});
   factory TaskEntity.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -157,13 +157,10 @@ class TaskTableCompanion extends UpdateCompanion<TaskEntity> {
   TaskTableCompanion.insert({
     this.id = const Value.absent(),
     @required String title,
-    @required DateTime dueDate,
-    @required DateTime startDate,
-    @required DateTime completionDate,
-  })  : title = Value(title),
-        dueDate = Value(dueDate),
-        startDate = Value(startDate),
-        completionDate = Value(completionDate);
+    this.dueDate = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.completionDate = const Value.absent(),
+  }) : title = Value(title);
   static Insertable<TaskEntity> custom({
     Expression<int> id,
     Expression<String> title,
@@ -263,7 +260,7 @@ class $TaskTableTable extends TaskTable
     return GeneratedDateTimeColumn(
       'due_date',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -275,7 +272,7 @@ class $TaskTableTable extends TaskTable
     return GeneratedDateTimeColumn(
       'start_date',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -289,7 +286,7 @@ class $TaskTableTable extends TaskTable
     return GeneratedDateTimeColumn(
       'completion_date',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -319,22 +316,16 @@ class $TaskTableTable extends TaskTable
     if (data.containsKey('due_date')) {
       context.handle(_dueDateMeta,
           dueDate.isAcceptableOrUnknown(data['due_date'], _dueDateMeta));
-    } else if (isInserting) {
-      context.missing(_dueDateMeta);
     }
     if (data.containsKey('start_date')) {
       context.handle(_startDateMeta,
           startDate.isAcceptableOrUnknown(data['start_date'], _startDateMeta));
-    } else if (isInserting) {
-      context.missing(_startDateMeta);
     }
     if (data.containsKey('completion_date')) {
       context.handle(
           _completionDateMeta,
           completionDate.isAcceptableOrUnknown(
               data['completion_date'], _completionDateMeta));
-    } else if (isInserting) {
-      context.missing(_completionDateMeta);
     }
     return context;
   }
