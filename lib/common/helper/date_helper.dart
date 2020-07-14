@@ -37,7 +37,9 @@ class DateHelper {
 
   /// Print dates as e.g. July 13th, 2020
   static String dateString(DateTime date) {
-    return "${monthString(date)} ${dayOrdinalString(date)}, ${date.year}";
+    return date == null
+        ? null
+        : "${monthString(date)} ${dayOrdinalString(date)}, ${date.year}";
   }
 
   static String dayOrdinalString(DateTime date) {
