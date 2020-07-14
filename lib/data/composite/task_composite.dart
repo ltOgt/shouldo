@@ -22,5 +22,5 @@ class TaskComposite {
 
   int get daysUntilDue => DateHelper.daysBetween(this.dueDate, DateTime.now());
   int get daysSinceStart =>
-      DateHelper.daysBetween(DateTime.now(), this.dueDate);
+      DateHelper.daysBetween(DateTime.now(), this.startDate);
 }
