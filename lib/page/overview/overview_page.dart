@@ -79,27 +79,6 @@ class OverviewPage extends StatelessWidget {
                 // : BOTTOM BAR EXTENSION AREA ======
                 ExpandableAdderArea(
                   expand: state.isAdderAreaExpanded,
-                  child: Container(
-                    color: Colors.green,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        TextField(),
-                        Container(
-                          color: Colors.pink,
-                          child: Text("Start Now"),
-                        ),
-                        Container(
-                          color: Colors.pink,
-                          child: Text("Deadline"),
-                        ),
-                        Container(
-                          color: Colors.pink,
-                          child: Text("Add Child"),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ],
             );
@@ -115,9 +94,10 @@ class OverviewPage extends StatelessWidget {
 }
 
 class ExpandableAdderArea extends StatefulWidget {
-  final Widget child;
   final bool expand;
-  ExpandableAdderArea({this.expand = false, this.child});
+  ExpandableAdderArea({
+    this.expand = false,
+  });
 
   @override
   _ExpandableAdderAreaState createState() => _ExpandableAdderAreaState();
@@ -127,47 +107,74 @@ class _ExpandableAdderAreaState extends State<ExpandableAdderArea>
     with SingleTickerProviderStateMixin {
   AnimationController expandController;
   Animation<double> animation;
+  FocusNode focusNode;
 
   @override
   void initState() {
     super.initState();
-    prepareAnimations();
-    _runExpandCheck();
-  }
-
-  ///Setting up the animation
-  void prepareAnimations() {
-    expandController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-    animation = CurvedAnimation(
-      parent: expandController,
+    this.expandController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 250),
+    );
+    this.animation = CurvedAnimation(
+      // : AnimationController extends Animation
+      parent: this.expandController,
       curve: Curves.fastOutSlowIn,
     );
-  }
-
-  void _runExpandCheck() {
-    if (widget.expand) {
-      expandController.forward();
-    } else {
-      expandController.reverse();
-    }
+    this.focusNode = FocusNode();
+    toggleExpansion();
   }
 
   @override
   void didUpdateWidget(ExpandableAdderArea oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _runExpandCheck();
+    toggleExpansion();
   }
 
   @override
   void dispose() {
-    expandController.dispose();
+    this.expandController.dispose();
+    this.focusNode.dispose();
     super.dispose();
+  }
+
+  void toggleExpansion() {
+    if (widget.expand) {
+      expandController.forward();
+    } else {
+      focusNode.unfocus();
+      expandController.reverse();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return SizeTransition(
-        axisAlignment: 1.0, sizeFactor: animation, child: widget.child);
+      axisAlignment: 1.0,
+      sizeFactor: animation,
+      child: Container(
+        color: Colors.green,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextField(
+              focusNode: this.focusNode,
+            ),
+            Container(
+              color: Colors.pink,
+              child: Text("Start Now"),
+            ),
+            Container(
+              color: Colors.pink,
+              child: Text("Deadline"),
+            ),
+            Container(
+              color: Colors.pink,
+              child: Text("Add Child"),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
