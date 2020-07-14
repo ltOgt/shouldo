@@ -5,8 +5,8 @@ import 'package:shouldo/page/overview/bloc/overview_bloc.dart';
 import 'package:shouldo/theme/theme_notifier.dart';
 import 'package:shouldo/theme/theme_wrap.dart';
 
-class OverviewBottomBarWidget extends StatelessWidget {
-  const OverviewBottomBarWidget({
+class BottomBar extends StatelessWidget {
+  const BottomBar({
     Key key,
     @required this.isAdderAreaExpanded,
   }) : super(key: key);

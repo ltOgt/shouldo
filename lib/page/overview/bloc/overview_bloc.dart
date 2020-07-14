@@ -53,7 +53,7 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
       // : should still keep track of whether the adder area was expanded; creation page independant
       OverviewState previousState = this.state;
       if (previousState is OvStateLoaded) {
-        _isAdderAreaExpanded = previousState.isAdderAreaExpanded;
+        _isAdderAreaExpanded = previousState.isBottomBarExpanded;
       }
 
       yield OvStateLoaded(
@@ -63,7 +63,7 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
         completedTasks: await dao.getGetCompletedForDate(date: _date),
         activeTasks: await dao.getGetActiveForDate(date: _date),
         stagedTasks: await dao.getGetStagedForDate(date: _date),
-        isAdderAreaExpanded: _isAdderAreaExpanded,
+        isBottomBarExpanded: _isAdderAreaExpanded,
       );
     }
     // : Handle all other events

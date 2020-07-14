@@ -10,6 +10,7 @@ abstract class ThemeWrap {
 
   double get sidePadding => 22;
   double get adderBarHeight => 50;
+  double get adderAreaHeight => 200;
 
   const ThemeWrap({
     @required this.themeData,
