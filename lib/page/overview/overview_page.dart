@@ -16,12 +16,7 @@ import 'child/overview_page_content/overview_page_content.dart';
 class OverviewPage extends StatelessWidget {
   const OverviewPage({
     Key key,
-    @required this.daysInPast,
-    @required this.goToFirstPage,
   }) : super(key: key);
-
-  final int daysInPast;
-  final VoidCallback goToFirstPage;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +38,6 @@ class OverviewPage extends StatelessWidget {
           }
           // : Data Loaded
           else if (state is OvStateLoaded) {
-            bool _TEMP_isEnterMode = false;
-
             return Column(
               children: <Widget>[
                 // : HEADER ===========================

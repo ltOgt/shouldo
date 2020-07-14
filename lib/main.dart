@@ -33,7 +33,7 @@ class App extends StatelessWidget {
       home: SafeArea(
         child: Scaffold(
           backgroundColor: themeNotifier.theme.themeData.backgroundColor,
-          body: OverviewPage(daysInPast: 0, goToFirstPage: null),
+          body: OverviewPage(),
         ),
       ),
     );
