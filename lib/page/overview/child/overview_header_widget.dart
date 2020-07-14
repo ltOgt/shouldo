@@ -5,17 +5,17 @@ import 'package:provider/provider.dart';
 // project
 import 'package:shouldo/common/widget/theme_toggle_widget.dart';
 import 'package:shouldo/theme/theme_notifier.dart';
+import 'package:shouldo/common/helper/date_helper.dart';
 
 class OverviewHeaderWidget extends StatelessWidget {
   const OverviewHeaderWidget({
     Key key,
-    @required DateTime focusedDate,
+    @required this.focusedDate,
     @required this.goToFirstPage,
     @required this.daysInPast,
-  })  : _focusedDate = focusedDate,
-        super(key: key);
+  }) : super(key: key);
 
-  final DateTime _focusedDate;
+  final DateTime focusedDate;
   final VoidCallback goToFirstPage;
   final int daysInPast;
 
@@ -36,25 +36,30 @@ class OverviewHeaderWidget extends StatelessWidget {
           InkWell(
             child: Icon(
               Icons.calendar_today,
-              color: _focusedDate.day == DateTime.now().day
+              color: DateHelper.isToday(this.focusedDate)
                   ? Colors.green
                   : themeNotifier.theme.themeData.iconTheme.color,
             ),
-            onTap: _focusedDate.day == DateTime.now().day
+            onTap: DateHelper.isToday(this.focusedDate)
                 ? null
                 : this.goToFirstPage,
           ),
           SizedBox(
             width: 20,
           ),
-          Text(_focusedDate.toIso8601String() +
-              (this.daysInPast == 0
-                  ? "  (Today)"
-                  : "  (${this.daysInPast} days ago)")),
+          Text(DateHelper.dateString(this.focusedDate)),
           Flexible(
             child: Container(height: 0),
             flex: 1,
           ),
+          Text(
+            (this.daysInPast == 0
+                ? "(Today)"
+                : "(" +
+                    DateHelper.dayAgoString(this.focusedDate).toString() +
+                    ")"),
+          ),
+          SizedBox(width: 10),
           ThemeToggleWidget(),
         ],
       ),

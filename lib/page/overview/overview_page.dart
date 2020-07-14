@@ -57,7 +57,7 @@ class OverviewPage extends StatelessWidget {
                         Duration(milliseconds: min(state.page * 100, 1000)),
                     curve: Curves.easeInOut,
                   ),
-                  daysInPast: 0,
+                  daysInPast: state.page,
                 ),
                 // : PAGE CONTENT; incl BOTTOM BAR ====
                 Flexible(
