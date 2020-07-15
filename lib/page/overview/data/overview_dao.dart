@@ -4,6 +4,7 @@ import 'package:moor_flutter/moor_flutter.dart';
 import 'package:shouldo/data/composite/task_composite.dart';
 import 'package:shouldo/data/db/moor_db.dart';
 import 'package:shouldo/data/db/table/task_table.dart';
+import 'package:shouldo/data/enum/ordering.dart';
 
 part 'overview_dao.g.dart';
 
@@ -42,13 +43,37 @@ class OverviewDao extends DatabaseAccessor<AppDatabase>
     ];
   }
 
-  Future<List<TaskComposite>> getGetActiveForDate({DateTime date}) async {
+  Future<List<TaskComposite>> getGetActiveForDate({
+    @required DateTime date,
+    Ordering ordering = Ordering.DUE_DATE_CLOSEST_FIRST,
+  }) async {
+    // : Genereate Order Clause based on passed ordering
+    OrderingTerm Function($TaskTableTable) orderClause;
+    if (ordering == Ordering.DUE_DATE_CLOSEST_FIRST) {
+      orderClause = (tbl) => OrderingTerm(
+            expression: tbl.startDate,
+            mode: OrderingMode.desc,
+          );
+    } else if (ordering == Ordering.START_DATE_OLDEST_FIRST) {
+      orderClause = (tbl) => OrderingTerm(
+            expression: tbl.startDate,
+            mode: OrderingMode.desc,
+          );
+    } else {
+      throw ("OverviewDao; Unmapped Ordering: <$ordering>");
+    }
+
+    // : Executre query with ordering
     return (select(taskTable)
           ..where(
             (tbl) =>
                 tbl.startDate.isSmallerOrEqualValue(date) &
-                //tbl.dueDate.isBiggerOrEqualValue(date) &  // TODO might not be needed
                 isNull(tbl.completionDate),
+          )
+          ..orderBy(
+            [
+              orderClause,
+            ],
           ))
         .map(
           (TaskEntity e) => TaskComposite(

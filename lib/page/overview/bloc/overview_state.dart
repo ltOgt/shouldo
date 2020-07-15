@@ -30,7 +30,7 @@ class OvStateLoaded extends OverviewState {
   // TODO postpone until tackled date change during app use
   final int page;
 
-  final bool isBottomBarExpanded;
+  final Ordering ordering;
 
   OvStateLoaded copyWith({
     DateTime focusedDate,
@@ -39,7 +39,7 @@ class OvStateLoaded extends OverviewState {
     List<TaskComposite> stagedTasks,
     PageController pageController,
     int page,
-    bool isAdderAreaExpanded,
+    Ordering ordering,
   }) {
     return OvStateLoaded(
       focusedDate: focusedDate ?? this.focusedDate,
@@ -48,7 +48,7 @@ class OvStateLoaded extends OverviewState {
       stagedTasks: stagedTasks ?? this.stagedTasks,
       pageController: pageController ?? this.pageController,
       page: page ?? this.page,
-      isBottomBarExpanded: isAdderAreaExpanded ?? this.isBottomBarExpanded,
+      ordering: ordering ?? this.ordering,
     );
   }
 
@@ -59,7 +59,7 @@ class OvStateLoaded extends OverviewState {
     this.stagedTasks = const [],
     @required this.pageController,
     @required this.page,
-    @required this.isBottomBarExpanded,
+    @required this.ordering,
   })  :
         // TODO [TEST] these are just to cover basic premisses; date day switch might cause problems too
         assert(

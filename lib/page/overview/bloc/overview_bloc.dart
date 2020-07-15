@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 // project
 import 'package:shouldo/data/composite/task_composite.dart';
+import 'package:shouldo/data/enum/ordering.dart';
 import 'package:shouldo/page/overview/data/overview_dao.dart';
 
 part 'overview_event.dart';
@@ -48,13 +49,6 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
     // : Handle initialization for current page
     if (event is OvEventLoadForPage) {
       DateTime _date = DateTime.now().subtract(Duration(days: event.page));
-      bool _isAdderAreaExpanded = false;
-
-      // : should still keep track of whether the adder area was expanded; creation page independant
-      OverviewState previousState = this.state;
-      if (previousState is OvStateLoaded) {
-        _isAdderAreaExpanded = previousState.isBottomBarExpanded;
-      }
 
       yield OvStateLoaded(
         focusedDate: _date,
@@ -63,7 +57,7 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
         completedTasks: await dao.getGetCompletedForDate(date: _date),
         activeTasks: await dao.getGetActiveForDate(date: _date),
         stagedTasks: await dao.getGetStagedForDate(date: _date),
-        isBottomBarExpanded: _isAdderAreaExpanded,
+        ordering: Ordering.values[0],
       );
     }
     // : Handle all other events
@@ -72,9 +66,14 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
       // : Assumption is that previous state is loaded
       if (previousState is OvStateLoaded) {
         // : toggle only expansion
-        if (event is OvEventToggleAdderAreaExpansion) {
+        if (event is OvEventToggleSorting) {
+          Ordering _ordering = previousState.ordering.next();
           yield previousState.copyWith(
-            isAdderAreaExpanded: event.isExpanded,
+            activeTasks: await dao.getGetActiveForDate(
+              date: previousState.focusedDate,
+              ordering: _ordering,
+            ),
+            ordering: _ordering,
           );
         }
         // : create a new event

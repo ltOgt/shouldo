@@ -1,7 +1,7 @@
 part of 'overview_bloc.dart';
 
 /// Available Events:
-/// [OvEventLoadForPage], [OvEventToggleAdderAreaExpansion], [OvEventAddTask],
+/// [OvEventLoadForPage], [OvEventToggleSorting], [OvEventAddTask],
 @immutable
 abstract class OverviewEvent {}
 
@@ -14,13 +14,7 @@ class OvEventLoadForPage implements OverviewEvent {
   });
 }
 
-class OvEventToggleAdderAreaExpansion implements OverviewEvent {
-  final bool isExpanded;
-
-  OvEventToggleAdderAreaExpansion({
-    @required this.isExpanded,
-  });
-}
+class OvEventToggleSorting implements OverviewEvent {}
 
 class OvEventAddTask implements OverviewEvent {
   final DateTime dueDate;

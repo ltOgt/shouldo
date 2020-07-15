@@ -64,7 +64,9 @@ class OverviewPage extends StatelessWidget {
                   ),
                 ),
                 // TODO MERGE bottom bar with expandable
-                BottomBar(),
+                BottomBar(
+                  state: state,
+                ),
               ],
             );
           }

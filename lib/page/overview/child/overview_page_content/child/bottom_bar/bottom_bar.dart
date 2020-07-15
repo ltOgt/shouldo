@@ -1,6 +1,7 @@
 // framework
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shouldo/data/enum/ordering.dart';
 import 'package:shouldo/page/overview/bloc/overview_bloc.dart';
 import 'package:shouldo/theme/theme_notifier.dart';
 import 'package:shouldo/theme/theme_wrap.dart';
@@ -8,7 +9,10 @@ import 'package:shouldo/theme/theme_wrap.dart';
 class BottomBar extends StatefulWidget {
   const BottomBar({
     Key key,
+    @required this.state,
   }) : super(key: key);
+
+  final OvStateLoaded state;
 
   @override
   _BottomBarState createState() => _BottomBarState();
@@ -74,11 +78,15 @@ class _BottomBarState extends State<BottomBar> {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           // : Change ordering
-          Container(
-            child: InkWell(
-              // TODO reuse expansion toggle for this
-              onTap: () => null, //BlocProvider.of<OverviewBloc>(context).add(),
-              child: Icon(Icons.swap_vert),
+          Tooltip(
+            message: widget.state.ordering.next().toReadable(),
+            child: Container(
+              child: InkWell(
+                onTap: () => BlocProvider.of<OverviewBloc>(context).add(
+                  OvEventToggleSorting(),
+                ),
+                child: Icon(Icons.swap_vert),
+              ),
             ),
           ),
           SizedBox(
@@ -97,15 +105,18 @@ class _BottomBarState extends State<BottomBar> {
           ),
           // : !FOCUSED => Focus text
           // :  FOCUSED => Create new from text value
-          Container(
-            child: InkWell(
-              onTap: () => this.sTextFocused
-                  // : Create from entered text
-                  ? this._fPressDone()
-                  // : Request focus to start typing (same as tapping textfield directly)
-                  : this.focusNode.requestFocus(),
-              child: Icon(
-                this.sTextFocused ? Icons.done : Icons.add_box,
+          Tooltip(
+            message: this.sTextFocused ? "Save new Task" : "Write new Task",
+            child: Container(
+              child: InkWell(
+                onTap: () => this.sTextFocused
+                    // : Create from entered text
+                    ? this._fPressDone()
+                    // : Request focus to start typing (same as tapping textfield directly)
+                    : this.focusNode.requestFocus(),
+                child: Icon(
+                  this.sTextFocused ? Icons.done : Icons.add_box,
+                ),
               ),
             ),
           ),
