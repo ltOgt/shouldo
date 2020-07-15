@@ -9,9 +9,11 @@ class BottomBar extends StatelessWidget {
   const BottomBar({
     Key key,
     @required this.isAdderAreaExpanded,
+    @required this.onDone,
   }) : super(key: key);
 
   final bool isAdderAreaExpanded;
+  final VoidCallback onDone;
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +33,23 @@ class BottomBar extends StatelessWidget {
               height: 1,
             ),
           ),
+          if (this.isAdderAreaExpanded)
+            Container(
+              child: InkWell(
+                onTap: this.onDone,
+                child: Icon(Icons.done),
+              ),
+            ),
           Container(
             child: InkWell(
               onTap: () => BlocProvider.of<OverviewBloc>(context).add(
                 OvEventToggleAdderAreaExpansion(
-                  isExpanded:
-                      !isAdderAreaExpanded, // TODO should always be true since button gone when expanded
+                  isExpanded: !this
+                      .isAdderAreaExpanded, // TODO should always be true since button gone when expanded
                 ),
               ),
-              child: Icon(Icons.add_box),
+              child:
+                  Icon(this.isAdderAreaExpanded ? Icons.cancel : Icons.add_box),
             ),
           ),
         ],

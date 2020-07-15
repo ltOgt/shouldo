@@ -19,50 +19,74 @@ class OverviewDao extends DatabaseAccessor<AppDatabase>
   Future<List<TaskComposite>> getGetCompletedForDate({DateTime date}) async {
     return [
       TaskComposite(
-        id: 5,
-        dueDate: DateTime.now().add(Duration(days: 4)),
-        startDate: DateTime.now().subtract(Duration(days: 4)),
-        completionDate: DateTime.now(),
-        title: "Uncompleted Task 4-4 (B-T)",
-      ),
-    ];
-  }
-
-  Future<List<TaskComposite>> getGetActiveForDate({DateTime date}) async {
-    return [
-      TaskComposite(
         id: 0,
         dueDate: DateTime.now().add(Duration(days: 3)),
         startDate: DateTime.now().subtract(Duration(days: 3)),
-        completionDate: null,
-        title: "Uncompleted Task 3-3 (B-T)",
+        completionDate: DateTime.now(),
+        title: "Completed Task 3-3 (B-T)",
       ),
       TaskComposite(
         id: 1,
         dueDate: DateTime.now().add(Duration(days: 2)),
         startDate: DateTime.now().subtract(Duration(days: 2)),
-        completionDate: null,
-        title: "Uncompleted Task 2-2 (M-M)",
+        completionDate: DateTime.now(),
+        title: "Completed Task 2-2 (M-M)",
       ),
       TaskComposite(
         id: 2,
         dueDate: DateTime.now().add(Duration(days: 1)),
         startDate: DateTime.now().subtract(Duration(days: 1)),
-        completionDate: null,
-        title: "Uncompleted Task 1-1 (T-B)",
+        completionDate: DateTime.now(),
+        title: "Completed Task 1-1 (T-B)",
       ),
     ];
   }
 
+  Future<List<TaskComposite>> getGetActiveForDate({DateTime date}) async {
+    return (select(taskTable)
+          ..where(
+            (tbl) =>
+                tbl.startDate.isSmallerOrEqualValue(date) &
+                //tbl.dueDate.isBiggerOrEqualValue(date) &  // TODO might not be needed
+                isNull(tbl.completionDate),
+          ))
+        .map(
+          (TaskEntity e) => TaskComposite(
+            id: e.id,
+            dueDate: e.dueDate,
+            startDate: e.startDate,
+            completionDate: e.completionDate,
+            title: e.title,
+          ),
+        )
+        .get();
+  }
+
   Future<List<TaskComposite>> getGetStagedForDate({DateTime date}) async {
-    return [
-      TaskComposite(
-        id: 4,
-        dueDate: null,
-        startDate: null,
-        completionDate: null,
-        title: "Staged Task",
-      ),
-    ];
+    return (select(taskTable)
+          ..where(
+            (tbl) =>
+                isNull(tbl.startDate) &
+                isNull(tbl.dueDate) &
+                isNull(tbl.completionDate),
+          ))
+        .map(
+          (TaskEntity e) => TaskComposite(
+            id: e.id,
+            dueDate: e.dueDate,
+            startDate: e.startDate,
+            completionDate: e.completionDate,
+            title: e.title,
+          ),
+        )
+        .get();
+  }
+
+  Future<int> createTask({String title, DateTime dueDate, DateTime startDate}) {
+    return into(taskTable).insert(TaskTableCompanion(
+      title: Value(title ?? "No Title"), // TODO this should never occur
+      dueDate: dueDate == null ? Value.absent() : Value(dueDate),
+      startDate: startDate == null ? Value.absent() : Value(startDate),
+    ));
   }
 }

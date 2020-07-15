@@ -38,18 +38,6 @@ class OverviewPageContent extends StatelessWidget {
             tasks: state.activeTasks,
           ),
           TaskSection(
-            title: "Active",
-            tasks: state.activeTasks,
-          ),
-          TaskSection(
-            title: "Active",
-            tasks: state.activeTasks,
-          ),
-          TaskSection(
-            title: "Active",
-            tasks: state.activeTasks,
-          ),
-          TaskSection(
             title: "Staged",
             tasks: state.stagedTasks,
           ),

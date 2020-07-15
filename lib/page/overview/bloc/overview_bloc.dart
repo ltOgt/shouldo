@@ -71,10 +71,24 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
       OverviewState previousState = this.state;
       // : Assumption is that previous state is loaded
       if (previousState is OvStateLoaded) {
-        // TODO
+        // : toggle only expansion
         if (event is OvEventToggleAdderAreaExpansion) {
           yield previousState.copyWith(
             isAdderAreaExpanded: event.isExpanded,
+          );
+        }
+        // : create a new event
+        else if (event is OvEventAddTask) {
+          await dao.createTask(
+            title: event.title,
+            dueDate: event.dueDate,
+            startDate: event.startDate,
+          );
+          yield previousState.copyWith(
+            activeTasks:
+                await dao.getGetActiveForDate(date: previousState.focusedDate),
+            stagedTasks:
+                await dao.getGetStagedForDate(date: previousState.focusedDate),
           );
         }
         // : Seal

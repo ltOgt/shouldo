@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shouldo/data/db/moor_db.dart';
 import 'package:shouldo/page/overview/bloc/overview_bloc.dart';
 
-import 'child/overview_page_content/child/expandable_bottom_bar/expandable_bottom_bar.dart';
+import 'child/overview_page_content/child/bottom_bar/bottom_bar.dart';
 import 'child/overview_header_widget.dart';
 import 'child/overview_page_content/overview_page_content.dart';
 
@@ -64,9 +64,7 @@ class OverviewPage extends StatelessWidget {
                   ),
                 ),
                 // TODO MERGE bottom bar with expandable
-                ExpandableBottomBar(
-                  expand: state.isBottomBarExpanded,
-                ),
+                BottomBar(),
               ],
             );
           }
