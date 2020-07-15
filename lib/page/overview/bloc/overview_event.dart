@@ -1,7 +1,7 @@
 part of 'overview_bloc.dart';
 
 /// Available Events:
-/// [OvEventLoadForPage], [OvEventToggleSorting], [OvEventAddTask],
+/// [OvEventLoadForPage], [OvEventToggleSorting], [OvEventAddTask], [OvEventToggleTaskCompletion]
 @immutable
 abstract class OverviewEvent {}
 
@@ -25,5 +25,15 @@ class OvEventAddTask implements OverviewEvent {
     @required this.title,
     this.dueDate,
     this.startDate,
+  });
+}
+
+class OvEventToggleTaskCompletion implements OverviewEvent {
+  final TaskComposite task;
+  final bool doComplete;
+
+  OvEventToggleTaskCompletion({
+    @required this.task,
+    @required this.doComplete,
   });
 }

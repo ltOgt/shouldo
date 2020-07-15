@@ -1,5 +1,7 @@
 // framework
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shouldo/data/composite/task_composite.dart';
 // project
 import 'package:shouldo/page/overview/bloc/overview_bloc.dart';
 import 'package:shouldo/theme/theme_notifier.dart';
@@ -18,6 +20,16 @@ class OverviewPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeWrap theme = ThemeNotifier.getTheme(context);
+    void _fSendToggleEvent(TaskComposite task, bool doComplete) {
+      if ((task.completionDate == null) == doComplete) {
+        BlocProvider.of<OverviewBloc>(context).add(OvEventToggleTaskCompletion(
+          task: task,
+          doComplete: doComplete,
+        ));
+      } else {
+        throw ("OverviewPageContent; Task toggled although already in that state: <$task> <$doComplete>");
+      }
+    }
 
     // : Page Border Padding
     return Padding(
@@ -32,14 +44,17 @@ class OverviewPageContent extends StatelessWidget {
           TaskSection(
             title: "Completed",
             tasks: state.completedTasks,
+            onUnCheck: (TaskComposite task) => _fSendToggleEvent(task, false),
           ),
           TaskSection(
             title: "Active",
             tasks: state.activeTasks,
+            onCheck: (TaskComposite task) => _fSendToggleEvent(task, true),
           ),
           TaskSection(
             title: "Staged",
             tasks: state.stagedTasks,
+            onCheck: (TaskComposite task) => _fSendToggleEvent(task, true),
           ),
         ],
       ),

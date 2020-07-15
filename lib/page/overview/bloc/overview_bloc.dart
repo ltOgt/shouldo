@@ -76,7 +76,7 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
             ordering: _ordering,
           );
         }
-        // : create a new event
+        // : create a new task
         else if (event is OvEventAddTask) {
           await dao.createTask(
             title: event.title,
@@ -84,6 +84,21 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
             startDate: event.startDate,
           );
           yield previousState.copyWith(
+            activeTasks:
+                await dao.getGetActiveForDate(date: previousState.focusedDate),
+            stagedTasks:
+                await dao.getGetStagedForDate(date: previousState.focusedDate),
+          );
+        }
+        // : complete an existing task
+        else if (event is OvEventToggleTaskCompletion) {
+          await dao.setTaskCompletion(
+            doComplete: event.doComplete,
+            task: event.task,
+          );
+          yield previousState.copyWith(
+            completedTasks: await dao.getGetCompletedForDate(
+                date: previousState.focusedDate),
             activeTasks:
                 await dao.getGetActiveForDate(date: previousState.focusedDate),
             stagedTasks:

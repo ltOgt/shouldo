@@ -1,5 +1,6 @@
 // packages
 import 'package:moor_flutter/moor_flutter.dart';
+import 'package:shouldo/common/helper/date_helper.dart';
 // project
 import 'package:shouldo/data/composite/task_composite.dart';
 import 'package:shouldo/data/db/moor_db.dart';
@@ -18,29 +19,24 @@ class OverviewDao extends DatabaseAccessor<AppDatabase>
   OverviewDao(this.db) : super(db);
 
   Future<List<TaskComposite>> getGetCompletedForDate({DateTime date}) async {
-    return [
-      TaskComposite(
-        id: 0,
-        dueDate: DateTime.now().add(Duration(days: 3)),
-        startDate: DateTime.now().subtract(Duration(days: 3)),
-        completionDate: DateTime.now(),
-        title: "Completed Task 3-3 (B-T)",
-      ),
-      TaskComposite(
-        id: 1,
-        dueDate: DateTime.now().add(Duration(days: 2)),
-        startDate: DateTime.now().subtract(Duration(days: 2)),
-        completionDate: DateTime.now(),
-        title: "Completed Task 2-2 (M-M)",
-      ),
-      TaskComposite(
-        id: 2,
-        dueDate: DateTime.now().add(Duration(days: 1)),
-        startDate: DateTime.now().subtract(Duration(days: 1)),
-        completionDate: DateTime.now(),
-        title: "Completed Task 1-1 (T-B)",
-      ),
-    ];
+    DateTime _startOfToday = DateHelper.withoutTime(date);
+    return (select(taskTable)
+          ..where((tbl) =>
+              isNotNull(tbl.completionDate) &
+              // : is today
+              tbl.completionDate
+                  .isSmallerThanValue(_startOfToday.add(Duration(days: 1))) &
+              tbl.completionDate.isBiggerOrEqualValue(_startOfToday)))
+        .map(
+          (TaskEntity e) => TaskComposite(
+            id: e.id,
+            dueDate: e.dueDate,
+            startDate: e.startDate,
+            completionDate: e.completionDate,
+            title: e.title,
+          ),
+        )
+        .get();
   }
 
   Future<List<TaskComposite>> getGetActiveForDate({
@@ -112,6 +108,19 @@ class OverviewDao extends DatabaseAccessor<AppDatabase>
       title: Value(title ?? "No Title"), // TODO this should never occur
       dueDate: dueDate == null ? Value.absent() : Value(dueDate),
       startDate: startDate == null ? Value.absent() : Value(startDate),
+    ));
+  }
+
+  Future<bool> setTaskCompletion({
+    @required bool doComplete,
+    @required TaskComposite task,
+  }) {
+    return update(taskTable).replace(TaskTableCompanion(
+      id: Value(task.id),
+      title: Value(task.title),
+      dueDate: Value(task.dueDate),
+      startDate: Value(task.startDate),
+      completionDate: doComplete ? Value(DateTime.now()) : Value(null),
     ));
   }
 }

@@ -8,10 +8,15 @@ class TaskSection extends StatelessWidget {
     Key key,
     @required this.title,
     @required this.tasks,
+    this.onCheck,
+    this.onUnCheck,
   }) : super(key: key);
 
   final String title;
   final List<TaskComposite> tasks;
+
+  final void Function(TaskComposite task) onCheck;
+  final void Function(TaskComposite task) onUnCheck;
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +38,18 @@ class TaskSection extends StatelessWidget {
           Column(
             children: List.generate(
               this.tasks.length,
-              // TODO add switch for multi task widget
-              (index) => Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: SingleTaskWidget(
-                  taskData: this.tasks.elementAt(index),
-                ),
-              ),
+              // TODO [UX] add switch for multi task widget
+              (index) {
+                TaskComposite _task = this.tasks.elementAt(index);
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: SingleTaskWidget(
+                    taskData: _task,
+                    onCheck: () => this.onCheck?.call(_task),
+                    onUnCheck: () => this.onUnCheck?.call(_task),
+                  ),
+                );
+              },
             ),
           ),
         ],

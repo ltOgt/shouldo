@@ -1,4 +1,8 @@
 class DateHelper {
+  static DateTime withoutTime(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
+  }
+
   /// Returns the difference between two dates while ignoring the time
   ///
   /// This "fixes" the following unwanted behaviour:
@@ -15,8 +19,8 @@ class DateHelper {
   static int daysBetween(DateTime first, DateTime other) {
     return (first == null || other == null)
         ? null
-        : DateTime(first.year, first.month, first.day)
-            .difference(DateTime(other.year, other.month, other.day))
+        : DateHelper.withoutTime(first)
+            .difference(DateHelper.withoutTime(other))
             .inDays;
   }
 
