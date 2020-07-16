@@ -23,4 +23,7 @@ class TaskComposite {
   int get daysUntilDue => DateHelper.daysBetween(this.dueDate, DateTime.now());
   int get daysSinceStart =>
       DateHelper.daysBetween(DateTime.now(), this.startDate);
+
+  bool get isCompleted => this.completionDate != null;
+  bool get isActive => this.startDate != null;
 }

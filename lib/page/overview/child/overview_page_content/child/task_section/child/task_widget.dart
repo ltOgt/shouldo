@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shouldo/theme/theme_notifier.dart';
 import 'package:shouldo/theme/theme_wrap.dart';
 
@@ -8,15 +7,15 @@ class TaskWidget extends StatelessWidget {
     Key key,
     @required this.checkIndicator,
     @required this.text,
-    @required this.daysLeft,
-    @required this.daysSince,
+    @required this.dueDateChild,
+    @required this.startDateChild,
   }) : super(key: key);
 
   /// E.g. a checkbox
   final Widget checkIndicator;
   final String text;
-  final int daysLeft;
-  final int daysSince;
+  final Widget dueDateChild;
+  final Widget startDateChild;
 
   // TODO maybe solve via renderbox reference instead?
   // _ used to make number container fill up row, but not optimal
@@ -69,7 +68,8 @@ class TaskWidget extends StatelessWidget {
             ),
             height: this.height,
             width: this.height,
-            child: Center(child: Text("$daysSince")),
+            //child: Center(child: Text("$daysSince")),
+            child: Center(child: this.startDateChild),
           ),
           Container(
             height: this.height,
@@ -81,7 +81,8 @@ class TaskWidget extends StatelessWidget {
                 bottomRight: radius,
               ),
             ),
-            child: Center(child: Text("$daysLeft")),
+            //child: Center(child: Text("$daysLeft")),
+            child: Center(child: this.dueDateChild),
           ),
         ],
       ),

@@ -44,7 +44,7 @@ class TaskSection extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: SingleTaskWidget(
-                    taskData: _task,
+                    task: _task,
                     onCheck: () => this.onCheck?.call(_task),
                     onUnCheck: () => this.onUnCheck?.call(_task),
                   ),

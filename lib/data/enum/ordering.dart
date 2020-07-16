@@ -14,7 +14,7 @@ extension OrderingExtension on Ordering {
   String toReadable() {
     //
     if (this == Ordering.DUE_DATE_CLOSEST_FIRST) {
-      return "Order by remaining time, descending";
+      return "Order by remaining time, ascending";
     }
     //
     else if (this == Ordering.START_DATE_OLDEST_FIRST) {

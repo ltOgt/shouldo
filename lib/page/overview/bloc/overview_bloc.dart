@@ -84,8 +84,10 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
             startDate: event.startDate,
           );
           yield previousState.copyWith(
-            activeTasks:
-                await dao.getGetActiveForDate(date: previousState.focusedDate),
+            activeTasks: await dao.getGetActiveForDate(
+              date: previousState.focusedDate,
+              ordering: previousState.ordering,
+            ),
             stagedTasks:
                 await dao.getGetStagedForDate(date: previousState.focusedDate),
           );
@@ -99,8 +101,39 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
           yield previousState.copyWith(
             completedTasks: await dao.getGetCompletedForDate(
                 date: previousState.focusedDate),
-            activeTasks:
-                await dao.getGetActiveForDate(date: previousState.focusedDate),
+            activeTasks: await dao.getGetActiveForDate(
+              date: previousState.focusedDate,
+              ordering: previousState.ordering,
+            ),
+            stagedTasks:
+                await dao.getGetStagedForDate(date: previousState.focusedDate),
+          );
+        }
+        // : start a staged task
+        else if (event is OvEventStartTask) {
+          await dao.startTask(
+            task: event.task,
+          );
+          yield previousState.copyWith(
+            activeTasks: await dao.getGetActiveForDate(
+              date: previousState.focusedDate,
+              ordering: previousState.ordering,
+            ),
+            stagedTasks:
+                await dao.getGetStagedForDate(date: previousState.focusedDate),
+          );
+        }
+        // : start a staged task
+        else if (event is OvEventSetTaskDueDate) {
+          await dao.setDueDateForTaskAndStartIfNotActive(
+            task: event.task,
+            dueDate: event.dueDate,
+          );
+          yield previousState.copyWith(
+            activeTasks: await dao.getGetActiveForDate(
+              date: previousState.focusedDate,
+              ordering: previousState.ordering,
+            ),
             stagedTasks:
                 await dao.getGetStagedForDate(date: previousState.focusedDate),
           );
